@@ -1,0 +1,7 @@
+Web Dynamic Project
+Convert to maven
+jre e jdk 11
+eclipse ide 2022-03
+inicio: macOS X
+-----------------
+
