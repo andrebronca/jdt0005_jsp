@@ -3,5 +3,8 @@ Convert to maven
 jre e jdk 11
 eclipse ide 2022-03
 inicio: macOS X
+TomCat 10: funcionou startar a página index.jsp
+Obs.: Wildfly 24 não localizou o index.jsp
+Todas as versões de java e pom.xml estão setados para java 11
 -----------------
 
