@@ -6,6 +6,21 @@
   <packaging>war</packaging>
   <name>jdt0005</name>
   <description>jdt0005 curso jsp</description>
+  <dependencies>
+    <!-- Não está sendo utilizada, pode ser que uma versão do tomcat abaixo da 10 utilize. Obtém os valores de request/response -->
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>javax.servlet-api</artifactId>
+      <version>4.0.1</version>
+      <scope>provided</scope>
+    </dependency>
+    <!-- Utilizando para obter os dados via request/response, funciona bem com tomcat 10 -->
+    <dependency>
+      <groupId>com.guicedee.services</groupId>
+      <artifactId>jakarta.servlet-api</artifactId>
+      <version>1.2.2.1</version>
+    </dependency>
+  </dependencies>
   <build>
     <plugins>
       <plugin>

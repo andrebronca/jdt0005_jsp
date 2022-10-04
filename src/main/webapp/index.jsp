@@ -11,7 +11,7 @@
   out.print("<h1>JSP</h1>"); 
   %>
   
-  <form action="receber-nome.jsp">
+  <form action="ServletLogin" method="post">
     <input type="text" name="nome" id="nome"><br>
     <input type="text" name="idade" id="idade"><br>
     <input type="submit" value="Enviar">
