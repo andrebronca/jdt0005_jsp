@@ -1,8 +1,12 @@
 package com.arb.servlets;
 
 import java.io.IOException;
+
+import com.arb.model.ModelLogin;
+
+import jakarta.servlet.RequestDispatcher;
 /*
- * jakarta com tomcat 10 funciona a obten√ß√£o via request.
+ * jakarta com tomcat 10 funciona a obtenÁ„oo via request.
  * Caso mude para tomcat 9 pode ser que tenha que usar o javax em vez do jakarta
  */
 import jakarta.servlet.ServletException;
@@ -28,8 +32,19 @@ public class ServletLogin extends HttpServlet {
 	 * recebe os dados de formul√°rio
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println(request.getParameter("nome"));
-		System.out.println(request.getParameter("idade"));
+		
+		String login = request.getParameter("login");
+		String senha = request.getParameter("senha");
+		if (login != null && !login.isEmpty() && senha != null && !senha.isEmpty()) {
+			ModelLogin mLogin = new ModelLogin();
+			mLogin.setLogin(login);
+			mLogin.setSenha(senha);
+		} else {
+			RequestDispatcher redirecionar = request.getRequestDispatcher("index.jsp");
+			request.setAttribute("msg", "Informe o login e senha corretamente!");
+			redirecionar.forward(request, response);
+		}
+		
 	}
 
 }
