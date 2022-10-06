@@ -18,6 +18,9 @@ import jakarta.servlet.http.HttpServletResponse;
 @WebServlet("/ServletLogin")
 public class ServletLogin extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	//tentativa de fazer funcionar o simulador de login
+	private final String loginAdm = "admin";
+	private final String senhaAdm = "admin";
 
 	public ServletLogin() {
 	}
@@ -43,7 +46,7 @@ public class ServletLogin extends HttpServlet {
 			mLogin.setSenha(senha);
 			
 			//simulando um login com direcionamento para página administrativa
-			if(mLogin.getLogin().equalsIgnoreCase("admin") && mLogin.getSenha().equalsIgnoreCase("admin")) {
+			if(mLogin.getLogin() == loginAdm && mLogin.getSenha() == senhaAdm) {
 				request.getSession().setAttribute("usuario", mLogin.getLogin());
 				RequestDispatcher redirecionar = request.getRequestDispatcher("principal/principal.jsp");
 				redirecionar.forward(request, response);
