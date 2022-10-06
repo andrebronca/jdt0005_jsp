@@ -1,6 +1,10 @@
 package com.arb.filter;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
+
+import com.arb.connection.SingleConnectionBanco;
 
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
@@ -18,6 +22,7 @@ import jakarta.servlet.http.HttpSession;
 public class FilterAutenticacao extends HttpFilter implements Filter {
 
 	private static final long serialVersionUID = 5444527906793324109L;
+	private static Connection connection;
 
 	public FilterAutenticacao() {
 	}
@@ -25,6 +30,11 @@ public class FilterAutenticacao extends HttpFilter implements Filter {
 	// encerra os processos quando o servidor é parado
 	// ex. finaliza a conexão com BD
 	public void destroy() {
+		try {
+			connection.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 	// intercepta as requisições e as respostas no sistema
@@ -32,12 +42,11 @@ public class FilterAutenticacao extends HttpFilter implements Filter {
 	// ex. validar autenticação, commit e rollback, redirecionamento específico
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
-		
-		HttpServletRequest req = (HttpServletRequest) request;
-		HttpSession session = req.getSession();
-		String usuarioLogado = (String) session.getAttribute("usuario");
-		String urlAutenticar = req.getServletPath(); // url que está sendo acessada
 		try {
+			HttpServletRequest req = (HttpServletRequest) request;
+			HttpSession session = req.getSession();
+			String usuarioLogado = (String) session.getAttribute("usuario");
+			String urlAutenticar = req.getServletPath(); // url que está sendo acessada
 			// validar se está logado, senão redirecionar para a tela de login
 			if (usuarioLogado == null && !urlAutenticar.equals("/principal/ServletLogin")) {
 				// redireciona para a página de login e envia a url que tentou acessar, caso
@@ -49,14 +58,21 @@ public class FilterAutenticacao extends HttpFilter implements Filter {
 			} else {
 				chain.doFilter(request, response);
 			}
+			connection.commit();	//se tudo ocorreu bem, salva as alterações no BD
 		} catch (Exception e) {
 			e.printStackTrace();
+			try {
+				connection.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
 		}
 	}
 
 	// inicia os processos ou recursos quando o servidor sobe o projeto
 	// ex. iniciar a conexão com o BD
 	public void init(FilterConfig fConfig) throws ServletException {
+		connection = SingleConnectionBanco.getConnection();
 	}
 
 }
