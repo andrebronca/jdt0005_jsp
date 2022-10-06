@@ -15,8 +15,9 @@
 	%>
 	
 	<div style="color:red;text-align:center;padding: 5px;">${msg}</div>
-	<div style="border:2px solid #566573;width:10%;margin:auto;text-align:center;padding:5px;border-radius:15px;background-color:#d5d8dc;">
+	<div style="border:2px solid #566573;width:20%;margin:auto;text-align:center;padding:5px;border-radius:15px;background-color:#d5d8dc;">
 		<form action="ServletLogin" method="post">
+		  <input type="hidden" value="<%= request.getParameter("url") %>" name="url">
 			<label for="login">Login</label>
 			<input type="text" name="login" id="login">
 			<br> 

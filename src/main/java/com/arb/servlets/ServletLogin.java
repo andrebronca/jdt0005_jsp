@@ -6,7 +6,7 @@ import com.arb.model.ModelLogin;
 
 import jakarta.servlet.RequestDispatcher;
 /*
- * jakarta com tomcat 10 funciona a obtençãoo via request.
+ * jakarta com tomcat 10 funciona a obtenï¿½ï¿½oo via request.
  * Caso mude para tomcat 9 pode ser que tenha que usar o javax em vez do jakarta
  */
 import jakarta.servlet.ServletException;
@@ -15,12 +15,11 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet("/ServletLogin")
+@WebServlet(urlPatterns = {"/principal/ServletLogin", "/ServletLogin"})
 public class ServletLogin extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	// tentativa de fazer funcionar o simulador de login
-	private final String loginAdm = "admin";
-	private final String senhaAdm = "admin";
+	private final String INDEX = "/index.jsp";
+	private final String PRINCIPAL = "/principal/principal.jsp";
 
 	public ServletLogin() {
 	}
@@ -37,29 +36,35 @@ public class ServletLogin extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		ModelLogin mLogin = null;
 		String login = request.getParameter("login");
 		String senha = request.getParameter("senha");
-		if ((login != null && !login.isEmpty()) && (senha != null && !senha.isEmpty())) {
-			mLogin = new ModelLogin();
-			mLogin.setLogin(login);
-			mLogin.setSenha(senha);
-		} else {
-			RequestDispatcher redirecionar = request.getRequestDispatcher("/index.jsp");
-			request.setAttribute("msg", "Informe o login e senha corretamente!");
-			redirecionar.forward(request, response);
-		}
-		// simulando um login com direcionamento para página administrativa
-		if (mLogin != null) {
-			if (mLogin.getLogin().equals("admin") && mLogin.getSenha().equals("admin")) {
-				request.getSession().setAttribute("usuario", mLogin.getLogin());
-				RequestDispatcher redirecionar = request.getRequestDispatcher("/principal/principal.jsp");
-				redirecionar.forward(request, response);
+		//estÃ¡ no filterAutentication, caso o usuÃ¡rio nÃ£o logado tente acessar
+		String url = request.getParameter("url");
+		try {
+			ModelLogin mLogin = null;
+
+			if ((login != null && !login.isEmpty()) && (senha != null && !senha.isEmpty())) {
+				mLogin = new ModelLogin();
+				mLogin.setLogin(login);
+				mLogin.setSenha(senha);
 			} else {
-				RequestDispatcher redirecionar = request.getRequestDispatcher("/index.jsp");
-				request.setAttribute("msg", "Informe o login e senha corretamente!");
-				redirecionar.forward(request, response);
+				redirectComMsg(INDEX, "Informe o login e senha corretamente!", request, response);
 			}
+			// simulando um login com direcionamento para pagina administrativa
+			if (mLogin != null) {
+				if (mLogin.getLogin().equals("admin") && mLogin.getSenha().equals("admin")) {
+					request.getSession().setAttribute("usuario", mLogin.getLogin());
+					
+					if (url == null || url.equals("null")) {
+						url = PRINCIPAL;
+					}
+					redirectComMsg(url, null, request, response);
+				} else {
+					redirectComMsg(INDEX, "Informe o login e senha corretamente!", request, response);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 
 	}
