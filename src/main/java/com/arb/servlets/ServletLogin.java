@@ -16,11 +16,12 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet(urlPatterns = {"/principal/ServletLogin", "/ServletLogin"})
+@WebServlet(urlPatterns = { "/principal/ServletLogin", "/ServletLogin" })
 public class ServletLogin extends HttpServlet {
 	private static final long serialVersionUID = 4372181908333331079L;
-	private final String INDEX = "/index.jsp";
-	private final String PRINCIPAL = "/principal/principal.jsp";
+	private final String INDEXPAGE = "/index.jsp";
+	private final String PRINCIPALPAGE = "/principal/principal.jsp";
+	private final String ERRORPAGE = "/erro.jsp";
 	private DAOLoginRepository daoLoginRepository = new DAOLoginRepository();
 
 	public ServletLogin() {
@@ -40,34 +41,33 @@ public class ServletLogin extends HttpServlet {
 			throws ServletException, IOException {
 		String login = request.getParameter("login");
 		String senha = request.getParameter("senha");
-		//está no filterAutentication, caso o usuário não logado tente acessar
+		// está no filterAutentication, caso o usuário não logado tente acessar
 		String url = request.getParameter("url");
-		//se não tiver o try/catch não ocorre a validação lógica dos: IFs
+		// se não tiver o try/catch não ocorre a validação lógica dos: IFs
 		try {
-			ModelLogin mLogin = null;
-
 			if ((login != null && !login.isEmpty()) && (senha != null && !senha.isEmpty())) {
-				mLogin = new ModelLogin();
+				ModelLogin mLogin = new ModelLogin();
 				mLogin.setLogin(login);
 				mLogin.setSenha(senha);
-				
+
 				if (mLogin != null) {
 					if (daoLoginRepository.validarAutenticacao(mLogin)) {
 						request.getSession().setAttribute("usuario", mLogin.getLogin());
-						
+
 						if (url == null || url.equals("null")) {
-							url = PRINCIPAL;
+							url = PRINCIPALPAGE;
 						}
 						redirectComMsg(url, null, request, response);
 					} else {
-						redirectComMsg(INDEX, "Informe o login e senha corretamente!", request, response);
+						redirectComMsg(INDEXPAGE, "Informe o login e senha corretamente!", request, response);
 					}
 				}
 			} else {
-				redirectComMsg(INDEX, "Informe o login e senha corretamente!", request, response);
+				redirectComMsg(INDEXPAGE, "Informe o login e senha corretamente!", request, response);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			redirectComMsg(ERRORPAGE, e.getMessage(), request, response);
 		}
 
 	}

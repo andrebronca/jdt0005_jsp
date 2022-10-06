@@ -58,9 +58,19 @@ public class FilterAutenticacao extends HttpFilter implements Filter {
 			} else {
 				chain.doFilter(request, response);
 			}
-			connection.commit();	//se tudo ocorreu bem, salva as alterações no BD
+			connection.commit(); // se tudo ocorreu bem, salva as alterações no BD
 		} catch (Exception e) {
 			e.printStackTrace();
+
+			// aqui não vou criar um método como foi na ServletLogin
+			RequestDispatcher redirecionar = request.getRequestDispatcher("/erro.jsp");
+			request.setAttribute("msg", e.getMessage());
+			redirecionar.forward(request, response);
+			/*
+			 * Um problema que vejo é o fornecimento de detalhes, seria melhor criar uma outra forma de tratamento.
+			 * ERROR: column "senhas" does not exist Dica: Perhaps you meant to reference the column "model_login.senha". Posição: 59
+			 */
+
 			try {
 				connection.rollback();
 			} catch (SQLException e1) {
