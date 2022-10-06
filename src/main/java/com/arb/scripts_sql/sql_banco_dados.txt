@@ -1,0 +1,43 @@
+-- Database: jdt0005
+
+-- DROP DATABASE IF EXISTS jdt0005;
+
+CREATE DATABASE jdt0005
+    WITH
+    OWNER = postgres
+    ENCODING = 'UTF8'
+    LC_COLLATE = 'C'
+    LC_CTYPE = 'C'
+    TABLESPACE = pg_default
+    CONNECTION LIMIT = -1;
+
+COMMENT ON DATABASE jdt0005
+    IS 'jdevtreinamentos';
+
+--========================================
+
+-- Table: public.model_login
+
+-- DROP TABLE IF EXISTS public.model_login;
+
+--obs: essa tabela é conforme o curso, está simples e didática. Um projeto real é mais complexa.
+CREATE TABLE IF NOT EXISTS public.model_login
+(
+    login character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    senha character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT model_login_pkey PRIMARY KEY (login),
+    CONSTRAINT login_unique UNIQUE (login)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.model_login
+    OWNER to postgres;
+--========================================
+INSERT INTO public.model_login(
+  login, senha)
+  VALUES ('admin', 'admin1');
+  
+select * from model_login;
+--========================================
+
