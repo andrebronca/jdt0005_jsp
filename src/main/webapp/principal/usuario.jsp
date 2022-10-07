@@ -1,5 +1,9 @@
+<%@page import="com.arb.model.ModelLogin"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
+<%
+ String path = request.getContextPath();
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -44,28 +48,36 @@
 												</div>
 												<div class="card-block">
 
-													<form class="form-material">
+													<form class="form-material" method="post" action="<%= path %>/ServletUsuarioController">
 														<div class="form-group form-default">
-															<input type="text" name="id" id="id" class="form-control" readonly="readonly"><span
-																class="form-bar"></span><label class="float-label">ID</label>
+															<input type="text" name="id" id="id" class="form-control" readonly="readonly" value="${mLogin.id}">
+															<span class="form-bar"></span>
+															<label class="float-label">ID</label>
 														</div>
 														<div class="form-group form-default">
-															<input type="text" name="nome" id="nome"
-																class="form-control" required><span
-																class="form-bar"></span><label class="float-label">Nome</label>
+															<input type="text" name="nome" id="nome" class="form-control" required="required" value="${mLogin.nome}">
+															<span class="form-bar"></span>
+															<label class="float-label">Nome</label>
 														</div>
 														<div class="form-group form-default">
-                              <input type="text" name="email" id="email"
-                                class="form-control" required><span
-                                class="form-bar"></span><label class="float-label">E-mail</label>
+														  <!--type="email" fica zuado -->
+                              <input type="text" name="email" id="email" class="form-control" autocomplete="off" required="required" value="${mLogin.email}">
+                              <span class="form-bar"></span>
+                              <label class="float-label">E-mail</label>
                             </div>
                             <div class="form-group form-default">
-                              <input type="password" name="senha" id="senha"
-                                class="form-control" required><span
-                                class="form-bar"></span><label class="float-label">Senha</label>
+                              <input type="text" name="login" id="login" class="form-control" required="required" value="${mLogin.login}">
+                              <span class="form-bar"></span>
+                              <label class="float-label">Login</label>
                             </div>
-														<!-- btn-primary, success, info, warning, danger, inverse, disabled disabled -->
-														<button class="btn btn-primary waves-effect waves-light">Salvar</button>
+                            <div class="form-group form-default">
+                              <input type="password" name="senha" id="senha" autocomplete="off" class="form-control" required="required" value="${mLogin.senha}">
+                              <span class="form-bar"></span>
+                              <label class="float-label">Senha</label>
+                            </div>
+														<button class="btn btn-success btn-out waves-effect waves-light">Adicionar</button>
+														<button class="btn btn-warning btn-out waves-effect waves-light">Remover</button>
+														<button class="btn btn-primary btn-out waves-effect waves-light">Salvar</button>
 													</form>
 
 												</div>
