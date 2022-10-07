@@ -124,7 +124,7 @@ String path = request.getContextPath();
                                   </li>
                                   <li class="waves-effect waves-light">
                                     <!-- FIXME LOGOUT -->
-                                      <a href="ServletLogin?acao=logout">
+                                      <a href="<%= path %>/ServletLogin?acao=logout">
                                           <i class="ti-layout-sidebar-left"></i> Logout
                                       </a>
                                   </li>

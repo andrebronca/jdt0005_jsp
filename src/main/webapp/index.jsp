@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%
+String path = request.getContextPath();
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,7 +24,7 @@
 	
 	<!-- depois aplica somente classe do bootstrap -->
 	<div style="text-align:center;padding:5px;" class="text-warning">${msg}</div>
-		<form action="ServletLogin" method="post" class="row g-3 needs-validation" novalidate>
+		<form action="<%= path %>/ServletLogin" method="post" class="row g-3 needs-validation" novalidate>
 		  <input type="hidden" value="<%= request.getParameter("url") %>" name="url">
 		  <div class="col-md-6">
   			<label for="login" class="form-label">Login</label>
