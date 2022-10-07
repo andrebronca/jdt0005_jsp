@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-    
+<%
+ String path = request.getContextPath();
+%>
 <!-- HTML5 Shim and Respond.js IE10 support of HTML5 elements and media queries -->
 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 <!--[if lt IE 10]>
@@ -14,24 +16,24 @@
 <meta name="description" content="Sistema em JSP" />
 <meta name="author" content="Andre R. B." />
 <!-- Favicon icon -->
-<link rel="icon" href="assets/images/favicon.ico" type="image/x-icon">
+<link rel="icon" href="<%= path %>/assets/images/favicon.ico" type="image/x-icon">
 <!-- Google font-->
 <link href="https://fonts.googleapis.com/css?family=Roboto:400,500" rel="stylesheet">
 <!-- waves.css -->
-<link rel="stylesheet" href="assets/pages/waves/css/waves.min.css" type="text/css" media="all">
+<link rel="stylesheet" href="<%= path %>/assets/pages/waves/css/waves.min.css" type="text/css" media="all">
  <!-- Required Fremwork -->
-<link rel="stylesheet" type="text/css" href="assets/css/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="<%= path %>/assets/css/bootstrap/css/bootstrap.min.css">
 <!-- waves.css -->
-<link rel="stylesheet" href="assets/pages/waves/css/waves.min.css" type="text/css" media="all">
+<link rel="stylesheet" href="<%= path %>/assets/pages/waves/css/waves.min.css" type="text/css" media="all">
 <!-- themify icon -->
-<link rel="stylesheet" type="text/css" href="assets/icon/themify-icons/themify-icons.css">
+<link rel="stylesheet" type="text/css" href="<%= path %>/assets/icon/themify-icons/themify-icons.css">
 <!-- Font Awesome -->
-<link rel="stylesheet" type="text/css" href="assets/icon/font-awesome/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="<%= path %>/assets/icon/font-awesome/css/font-awesome.min.css">
 <!-- scrollbar.css -->
-<link rel="stylesheet" type="text/css" href="assets/css/jquery.mCustomScrollbar.css">
+<link rel="stylesheet" type="text/css" href="<%= path %>/assets/css/jquery.mCustomScrollbar.css">
 <!-- am chart export.css -->
 <link rel="stylesheet" href="https://www.amcharts.com/lib/3/plugins/export/export.css" type="text/css" media="all" />
 <!-- Style.css -->
-<link rel="stylesheet" type="text/css" href="assets/css/style.css">
+<link rel="stylesheet" type="text/css" href="<%= path %>/assets/css/style.css">
 
   

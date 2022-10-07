@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Sistema em JSP - jdt0005</title>
+  <title></title>
   <jsp:include page="head.jsp"></jsp:include>
 </head>
 <body>
@@ -34,9 +34,9 @@
                                 <div class="page-wrapper">
                                     <!-- Page-body start -->
                                     <div class="page-body">
-                                        <div class="row">
-                                          
-                                        </div>
+                                      <div class="row">
+                                        <h2>Cadastro de usuário</h2>
+                                      </div>
                                     </div>
                                     <!-- Page-body end -->
                                 </div>

@@ -34,7 +34,9 @@
                                 <div class="page-wrapper">
                                     <!-- Page-body start -->
                                     <div class="page-body">
+                                      <div class="row">
                                         <h2>Template para criação de outras páginas</h2>
+                                      </div>
                                     </div>
                                     <!-- Page-body end -->
                                 </div>
