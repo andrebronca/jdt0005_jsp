@@ -1,32 +1,43 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
 <style>
 	<%@include file="/WEB-INF/resources/css/button12.css" %>
 </style>
 <title>Curso JSP</title>
 </head>
 <body>
+  <div class="container">
 	<%
-	out.print("<h1 style=\"text-align: center;\">Sistema em Java Server Pages</h1>");
+	out.print("<h3 class=\"text-center\">Sistema em Java Server Pages</h3>");
 	%>
 	
-	<div style="color:red;text-align:center;padding: 5px;">${msg}</div>
-	<div style="border:2px solid #566573;width:20%;margin:auto;text-align:center;padding:5px;border-radius:15px;background-color:#d5d8dc;">
-		<form action="ServletLogin" method="post">
+	<!-- depois aplica somente classe do bootstrap -->
+	<div style="text-align:center;padding:5px;" class="fw-bolder text-warning bg-dark">${msg}</div>
+		<form action="ServletLogin" method="post" class="row g-3">
 		  <input type="hidden" value="<%= request.getParameter("url") %>" name="url">
-			<label for="login">Login</label>
-			<input type="text" name="login" id="login">
-			<br> 
-			<label for="senha">Senha</label> 
-			<input type="password" name="senha" id="senha">
-			<br>
-			<br>
-			<input type="submit" value="Acessar" class="button-12">
+		  <div class="col-md-6">
+  			<label for="login" class="form-label">Login</label>
+	   		<input type="text" name="login" id="login" class="form-control">
+		  </div>
+			<div class="col-md-6">
+				<label for="senha" class="form-label">Senha</label>
+				<input type="password" name="senha" id="senha" class="form-control">
+			</div>
+			<div class="col-12">
+  			<input type="submit" value="Acessar" class="btn btn-primary">
+			</div> 
 		</form>
 	</div>
+	<!-- Option 1: Bootstrap Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+	
 </body>
 </html>
