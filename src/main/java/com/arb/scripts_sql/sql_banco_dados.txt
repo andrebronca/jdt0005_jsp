@@ -20,12 +20,15 @@ COMMENT ON DATABASE jdt0005
 
 -- DROP TABLE IF EXISTS public.model_login;
 
---obs: essa tabela é conforme o curso, está simples e didática. Um projeto real é mais complexa.
 CREATE TABLE IF NOT EXISTS public.model_login
 (
+    id integer NOT NULL DEFAULT nextval('model_login_id_seq'::regclass),
+    nome character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    email character varying(255) COLLATE pg_catalog."default" NOT NULL,
     login character varying(255) COLLATE pg_catalog."default" NOT NULL,
     senha character varying(255) COLLATE pg_catalog."default" NOT NULL,
-    CONSTRAINT model_login_pkey PRIMARY KEY (login),
+    CONSTRAINT model_login_pkey PRIMARY KEY (id),
+    CONSTRAINT email_unique UNIQUE (email),
     CONSTRAINT login_unique UNIQUE (login)
 )
 
@@ -33,11 +36,3 @@ TABLESPACE pg_default;
 
 ALTER TABLE IF EXISTS public.model_login
     OWNER to postgres;
---========================================
-INSERT INTO public.model_login(
-  login, senha)
-  VALUES ('admin', 'admin1');
-  
-select * from model_login;
---========================================
-

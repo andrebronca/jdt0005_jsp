@@ -44,8 +44,8 @@
 											<div class="card">
 												<div class="card-header">
 													<h5>Cadastro de usuário</h5>
-
 												</div>
+												<span style="padding: 2px 10px;">${msg}</span>
 												<div class="card-block">
 
 													<form class="form-material" method="post" action="<%= path %>/ServletUsuarioController">

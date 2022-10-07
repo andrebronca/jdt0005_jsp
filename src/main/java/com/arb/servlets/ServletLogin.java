@@ -81,7 +81,7 @@ public class ServletLogin extends HttpServlet {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			redirectComMsg(ERRORPAGE, e.getMessage(), request, response);
+			redirectComMsg(ERRORPAGE, "Exception: "+ e.getMessage(), request, response);
 		}
 	}
 
