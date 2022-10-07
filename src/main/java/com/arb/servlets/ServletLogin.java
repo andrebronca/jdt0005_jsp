@@ -32,8 +32,17 @@ public class ServletLogin extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// FIXME passando os parametros por get está acessando a área administrativa, tem que bloquear
-		doPost(request, response); // evitando a tela em branco
+		String acao = request.getParameter("acao");
+		if (acao != null && !acao.isEmpty() && acao.equals("logout")) {
+			request.getSession().invalidate();
+			redirectComMsg(INDEXPAGE, null, request, response);
+		} else {
+			// FIXME passando os parametros por get está acessando a área administrativa, tem que bloquear
+			doPost(request, response); // evitando a tela em branco
+			
+		}
+		
+		
 	}
 
 	/*
