@@ -32,6 +32,8 @@ public class ServletLogin extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		// FIXME passando os parametros por get está acessando a área administrativa, tem que bloquear
+		doPost(request, response); // evitando a tela em branco
 	}
 
 	/*
@@ -39,8 +41,11 @@ public class ServletLogin extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		String login = request.getParameter("login");
-		String senha = request.getParameter("senha");
+		String login = null;
+		String senha = null;
+		login = request.getParameter("login");
+		senha = request.getParameter("senha");
+
 		// está no filterAutentication, caso o usuário não logado tente acessar
 		String url = request.getParameter("url");
 		// se não tiver o try/catch não ocorre a validação lógica dos: IFs
@@ -69,7 +74,6 @@ public class ServletLogin extends HttpServlet {
 			e.printStackTrace();
 			redirectComMsg(ERRORPAGE, e.getMessage(), request, response);
 		}
-
 	}
 
 	private void redirectComMsg(String toPage, String msg, HttpServletRequest request, HttpServletResponse response)
