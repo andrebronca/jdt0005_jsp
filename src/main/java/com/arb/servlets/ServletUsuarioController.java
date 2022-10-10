@@ -48,9 +48,8 @@ public class ServletUsuarioController extends HttpServlet {
 			//novo usuário o id é null. Se já existe retorna true
 			if (dao.validarLogin(user.getLogin()) && user.getId() == null) {
 				msg ="Já existe esse login cadastrado!";
-			} else if (user.getId() != null) {	//update de usuário
-				
-			} else {	//salvar um novo
+			} else {	//salvar um novo ou atualizar
+				msg = user.isNovo3() ? "Adicionado com sucesso!" : "Atualizado com sucesso!";
 				user = dao.salvarUsuario(user);
 			}
 			System.out.println(user);

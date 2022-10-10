@@ -14,37 +14,54 @@ public class DAOUsuarioRepository {
 	public DAOUsuarioRepository() {
 		connection = SingleConnectionBanco.getConnection();
 	}
-	
+
 	public ModelLogin salvarUsuario(ModelLogin user) throws SQLException {
-		String sql = "INSERT INTO model_login(nome, email, login, senha) VALUES (?, ?, ?, ?)";
+		if (user.isNovo()) {
+			String sql = "INSERT INTO model_login(nome, email, login, senha) VALUES (?, ?, ?, ?)";
+			PreparedStatement ps = connection.prepareStatement(sql);
+			ps.setString(1, user.getNome());
+			ps.setString(2, user.getEmail());
+			ps.setString(3, user.getLogin());
+			ps.setString(4, user.getSenha());
+			ps.executeUpdate();
+
+			connection.commit();
+
+			// usar o this, senão não traz o id do usuário
+		} else {
+			atualizarUsuario(user);
+		}
+		return this.consultarUsuario(user.getLogin());
+	}
+	
+	public void atualizarUsuario(ModelLogin user) throws SQLException {
+		String sql = "UPDATE model_login SET nome=?, email=?, login=?, senha=? WHERE id = ?";
 		PreparedStatement ps = connection.prepareStatement(sql);
 		ps.setString(1, user.getNome());
 		ps.setString(2, user.getEmail());
 		ps.setString(3, user.getLogin());
 		ps.setString(4, user.getSenha());
+		ps.setLong(5, user.getId());
 		ps.executeUpdate();
-		
 		connection.commit();
-		
-		//usar o this, senão não traz o id do usuário
-		return this.consultarUsuario(user.getLogin());
 	}
-	
+
 	/**
 	 * Retorna o usuário caso exista no BD
+	 * 
 	 * @param login - que será pesquisado na tabela
 	 * @return
-	 * @throws SQLException 
+	 * @throws SQLException
 	 */
 	public ModelLogin consultarUsuario(String login) throws SQLException {
 		ModelLogin obj = null;
-		//novamente, não vou adotar a conversão para maiúsculo.
+		// novamente, não vou adotar a conversão para maiúsculo.
 //		String sql = "SELECT * FROM model_login where upper(login) = upper('?')";
 		String sql = "SELECT id, nome, email, login, senha FROM model_login where login = ?";
 		PreparedStatement ps = connection.prepareStatement(sql);
 		ps.setString(1, login);
 		ResultSet rs = ps.executeQuery();
-		while(rs.next()) {
+		while (rs.next()) {
 			obj = new ModelLogin();
 			obj.setId(rs.getLong("id"));
 			obj.setNome(rs.getString("nome"));
@@ -54,14 +71,15 @@ public class DAOUsuarioRepository {
 		}
 		return obj;
 	}
-	
-	//nem precisa desse método, dá pra usar o consultarUsuario, se retornar null é pq não existe o cadastro
+
+	// nem precisa desse método, dá pra usar o consultarUsuario, se retornar null é
+	// pq não existe o cadastro
 	public boolean validarLogin(String login) throws SQLException {
 		String sql = "select count(1) > 0 as existe from model_login where login = ?";
 		PreparedStatement ps = connection.prepareStatement(sql);
 		ps.setString(1, login);
 		ResultSet rs = ps.executeQuery();
-		rs.next();	//para acessar o resultado
+		rs.next(); // para acessar o resultado
 		return rs.getBoolean("existe");
 	}
 }
