@@ -1,6 +1,7 @@
 package com.arb.servlets;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 import com.arb.constantes.Constantes;
 import com.arb.dao.DAOUsuarioRepository;
@@ -24,7 +25,34 @@ public class ServletUsuarioController extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
+		try {
+			String acao = request.getParameter("acao");
+			String msg = null;
+			if(acao != null && !acao.isEmpty() && acao.equalsIgnoreCase("deletar")) {
+				String idUser = request.getParameter("id");
+				Long id = null;
+				try {
+					if (idUser != null) {
+						id = Long.parseLong(idUser);
+					}
+					dao.deletarUser(id);
+					msg = "Excluído com sucesso!";
+				} catch (SQLException e) {
+					e.printStackTrace();
+					redirectComMsg(Constantes.ERRORPAGE, "Exception: "+ e.getMessage(), request, response);
+				}
+			}
+			redirectComMsg("/principal/usuario.jsp", msg, request, response);
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+			redirectComMsg(Constantes.ERRORPAGE, "Exception: "+ e.getMessage(), request, response);
+		} catch (ServletException e) {
+			e.printStackTrace();
+			redirectComMsg(Constantes.ERRORPAGE, "Exception: "+ e.getMessage(), request, response);
+		} catch (IOException e) {
+			e.printStackTrace();
+			redirectComMsg(Constantes.ERRORPAGE, "Exception: "+ e.getMessage(), request, response);
+		}
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)

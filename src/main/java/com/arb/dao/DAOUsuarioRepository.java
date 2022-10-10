@@ -7,7 +7,9 @@ import java.sql.SQLException;
 
 import com.arb.connection.SingleConnectionBanco;
 import com.arb.model.ModelLogin;
-
+/*
+ * obs.: Em outro momento vou colocar os try/catch todos aqui, pq fica um código muito poluido na servlet.
+ */
 public class DAOUsuarioRepository {
 	private Connection connection;
 
@@ -81,5 +83,13 @@ public class DAOUsuarioRepository {
 		ResultSet rs = ps.executeQuery();
 		rs.next(); // para acessar o resultado
 		return rs.getBoolean("existe");
+	}
+	
+	public void deletarUser(Long id) throws SQLException {
+		String sql = "DELETE FROM model_login WHERE id = ?";
+		PreparedStatement ps = connection.prepareStatement(sql);
+		ps.setLong(1, id);
+		ps.executeUpdate();
+		connection.commit();
 	}
 }
