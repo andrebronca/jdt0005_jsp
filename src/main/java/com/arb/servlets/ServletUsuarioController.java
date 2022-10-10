@@ -44,12 +44,11 @@ public class ServletUsuarioController extends HttpServlet {
 			user.setLogin(login);
 			user.setSenha(senha);
 
+			user = dao.salvarUsuario(user);
 			System.out.println(user);
 
-			dao.salvarUsuario(user);
-
 			request.setAttribute("mLogin", user); // retorna os dados para a tela, mas n√£o com id gerado
-			redirectComMsg("/principal/usuario.jsp", "Adi√ß√£o realizada com sucesso!", request, response);
+			redirectComMsg("/principal/usuario.jsp", "AdiÁ„o realizada com sucesso!", request, response);
 		} catch (Exception e) {
 			e.printStackTrace();
 			redirectComMsg(Constantes.ERRORPAGE, "Exception: "+ e.getMessage(), request, response);
