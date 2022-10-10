@@ -31,6 +31,7 @@ public class ServletUsuarioController extends HttpServlet {
 			throws ServletException, IOException {
 		try {
 			String id = request.getParameter("id");
+			String msg = "Adição realizada com sucesso!";
 			Long idUser = id != null && !id.isEmpty() ? Long.parseLong(id) : null; // preferi separar
 			String nome = request.getParameter("nome");
 			String email = request.getParameter("email");
@@ -44,11 +45,18 @@ public class ServletUsuarioController extends HttpServlet {
 			user.setLogin(login);
 			user.setSenha(senha);
 
-			user = dao.salvarUsuario(user);
+			//novo usuário o id é null. Se já existe retorna true
+			if (dao.validarLogin(user.getLogin()) && user.getId() == null) {
+				msg ="Já existe esse login cadastrado!";
+			} else if (user.getId() != null) {	//update de usuário
+				
+			} else {	//salvar um novo
+				user = dao.salvarUsuario(user);
+			}
 			System.out.println(user);
 
 			request.setAttribute("mLogin", user); // retorna os dados para a tela, mas nÃ£o com id gerado
-			redirectComMsg("/principal/usuario.jsp", "Adição realizada com sucesso!", request, response);
+			redirectComMsg("/principal/usuario.jsp", msg, request, response);
 		} catch (Exception e) {
 			e.printStackTrace();
 			redirectComMsg(Constantes.ERRORPAGE, "Exception: "+ e.getMessage(), request, response);

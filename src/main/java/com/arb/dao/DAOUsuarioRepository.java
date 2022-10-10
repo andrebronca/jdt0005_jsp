@@ -54,4 +54,14 @@ public class DAOUsuarioRepository {
 		}
 		return obj;
 	}
+	
+	//nem precisa desse método, dá pra usar o consultarUsuario, se retornar null é pq não existe o cadastro
+	public boolean validarLogin(String login) throws SQLException {
+		String sql = "select count(1) > 0 as existe from model_login where login = ?";
+		PreparedStatement ps = connection.prepareStatement(sql);
+		ps.setString(1, login);
+		ResultSet rs = ps.executeQuery();
+		rs.next();	//para acessar o resultado
+		return rs.getBoolean("existe");
+	}
 }
