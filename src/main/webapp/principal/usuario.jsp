@@ -45,7 +45,7 @@
 												<div class="card-header">
 													<h5>Cadastro de usuário</h5>
 												</div>
-												<span style="padding: 2px 10px;">${msg}</span>
+												<span style="padding: 2px 10px;" id="msg">${msg}</span>
 												<div class="card-block">
 
 													<form id="formUser" class="form-material" method="post" action="<%= path %>/ServletUsuarioController">
@@ -78,6 +78,7 @@
 							                            </div>
 														<button type="button" class="btn btn-success btn-out waves-effect waves-light" onclick="limparForm();">Novo</button>
 														<button type="button" class="btn btn-warning btn-out waves-effect waves-light" onclick="deletarUser();">Remover</button>
+														<button type="button" class="btn btn-warning btn-out waves-effect waves-light" onclick="deleteComAjax();">Remover (Ajax)</button>
 														<button type="submit" class="btn btn-primary btn-out waves-effect waves-light">Salvar</button>
 													</form>
 
@@ -110,9 +111,30 @@
 		}
 
 		function deletarUser(){
-			document.getElementById("formUser").method = 'get';
-			document.getElementById("acao").value = 'deletar';
-			document.getElementById("formUser").submit();
+			if(confirm('Deseja excluir o cadastro?')){
+				document.getElementById("formUser").method = 'get';
+				document.getElementById("acao").value = 'deletar';
+				document.getElementById("formUser").submit();
+			}
+		}
+
+		function deleteComAjax(){
+			if(confirm('Deseja excluir o cadastro?')){
+				var urlAction = document.getElementById('formUser').action;
+				var idUser = document.getElementById('id').value;
+
+				$.ajax({
+					method: 'get',
+					url: urlAction,
+					data: 'acao=ajaxdeletar&id='+ idUser,
+					success: function(response){ 
+						document.getElementById('msg').textContent = response;
+						limparForm();
+					}
+				}).fail(function(xhr, status, errorThrown){
+					alert('Erro ao deletar usuário por id: '+ xhr.responseText);
+				});
+			}
 		}
 	</script>
 	
