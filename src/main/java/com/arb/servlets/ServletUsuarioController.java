@@ -26,21 +26,24 @@ public class ServletUsuarioController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		try {
+			
 			String acao = request.getParameter("acao");
 			String msg = null;
 			String idUser = request.getParameter("id");
 			Long id = null;
+			
 			if (idUser != null) {
 				id = Long.parseLong(idUser);
 			}
+			
 			if(acao != null && !acao.isEmpty() && acao.equalsIgnoreCase("deletar")) {
 				dao.deletarUser(id);
-				msg = "Excluído com sucesso!";
+				msg = "Excluido com sucesso!";
 				redirectComMsg("/principal/usuario.jsp", msg, request, response);
 			} else if(acao != null && !acao.isEmpty() && acao.equalsIgnoreCase("ajaxdeletar")){
-				//específico para Ajax
+				//especÃ­fico para Ajax
 				dao.deletarUser(id);
-				response.getWriter().write("Excluído com sucesso via Ajax!");
+				response.getWriter().write("Excluido com sucesso via Ajax!");
 			}
 		} catch (NumberFormatException e) {
 			e.printStackTrace();
@@ -60,8 +63,9 @@ public class ServletUsuarioController extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		try {
+			
 			String id = request.getParameter("id");
-			String msg = "Adição realizada com sucesso!";
+			String msg = "AdiÃ§Ã£o realizada com sucesso!";
 			Long idUser = id != null && !id.isEmpty() ? Long.parseLong(id) : null; // preferi separar
 			String nome = request.getParameter("nome");
 			String email = request.getParameter("email");
@@ -75,9 +79,9 @@ public class ServletUsuarioController extends HttpServlet {
 			user.setLogin(login);
 			user.setSenha(senha);
 
-			//novo usuário o id é null. Se já existe retorna true
+			//novo usuario o id Ã© null. Se jÃ¡ existe retorna true
 			if (dao.validarLogin(user.getLogin()) && user.getId() == null) {
-				msg ="Já existe esse login cadastrado!";
+				msg ="JÃ¡ existe esse login cadastrado!";
 			} else {	//salvar um novo ou atualizar
 				msg = user.isNovo3() ? "Adicionado com sucesso!" : "Atualizado com sucesso!";
 				user = dao.salvarUsuario(user);
@@ -104,6 +108,7 @@ public class ServletUsuarioController extends HttpServlet {
 	private void redirectComMsg(String pageDestino, String msgExibirTela, HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		RequestDispatcher redirecionar = request.getRequestDispatcher(pageDestino);
+		
 		if (msgExibirTela != null) {
 			request.setAttribute("msg", msgExibirTela);
 		}

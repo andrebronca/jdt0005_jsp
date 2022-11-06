@@ -8,4 +8,6 @@ Obs.: Wildfly 24 não localizou o index.jsp
 Todas as versões de java e pom.xml estão setados para java 11
 Mesma configuração no windows 10.
 -----------------
+depois de startar o tomcat, url de acesso.
+http://localhost:8080/jdt0005_curso_jsp/
 

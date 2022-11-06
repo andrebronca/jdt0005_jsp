@@ -28,13 +28,13 @@ String path = request.getContextPath();
 		  <input type="hidden" value="<%= request.getParameter("url") %>" name="url">
 		  <div class="col-md-6">
   			<label for="login" class="form-label">Login</label>
-	   		<input type="text" name="login" id="login" class="form-control" required value="admin">
+	   		<input type="text" name="login" id="login" class="form-control" required>
 	   		<div class="invalid-feedback">É necessário informar o login!</div>
 	   		<div class="valid-feedback">Ok</div>
 		  </div>
 			<div class="col-md-6">
 				<label for="senha" class="form-label">Senha</label>
-				<input type="password" name="senha" id="senha" class="form-control" required value="admin">
+				<input type="password" name="senha" id="senha" class="form-control" required>
 				<div class="invalid-feedback">É necessário informar a senha!</div>
 				<div class="valid-feedback">Ok</div>
 			</div>
@@ -52,7 +52,7 @@ String path = request.getContextPath();
 	  'use strict'
 
 	  // Fetch all the forms we want to apply custom Bootstrap validation styles to
-	  var forms = document.querySelectorAll('.needs-validation')
+	  var forms = document.querySelectorAll('.needs-validation');  //cabeçalho do form
 
 	  // Loop over them and prevent submission
 	  Array.prototype.slice.call(forms)

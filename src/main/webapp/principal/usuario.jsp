@@ -62,24 +62,25 @@
 														</div>
 														<div class="form-group form-default">
 														  <!--type="email" fica zuado -->
-							                              <input type="text" name="email" id="email" class="form-control" autocomplete="off" required="required" value="${mLogin.email}">
-							                              <span class="form-bar"></span>
-							                              <label class="float-label">E-mail</label>
-							                            </div>
-							                            <div class="form-group form-default">
-							                              <input type="text" name="login" id="login" class="form-control" required="required" value="${mLogin.login}">
-							                              <span class="form-bar"></span>
-							                              <label class="float-label">Login</label>
-							                            </div>
-							                            <div class="form-group form-default">
-							                              <input type="password" name="senha" id="senha" autocomplete="off" class="form-control" required="required" value="${mLogin.senha}">
-							                              <span class="form-bar"></span>
-							                              <label class="float-label">Senha</label>
-							                            </div>
+	                            <input type="text" name="email" id="email" class="form-control" autocomplete="off" required="required" value="${mLogin.email}">
+	                            <span class="form-bar"></span>
+	                            <label class="float-label">E-mail</label>
+	                          </div>
+	                          <div class="form-group form-default">
+	                            <input type="text" name="login" id="login" class="form-control" required="required" value="${mLogin.login}">
+	                            <span class="form-bar"></span>
+	                            <label class="float-label">Login</label>
+	                          </div>
+	                          <div class="form-group form-default">
+	                            <input type="password" name="senha" id="senha" autocomplete="off" class="form-control" required="required" value="${mLogin.senha}">
+	                            <span class="form-bar"></span>
+	                            <label class="float-label">Senha</label>
+	                          </div>
 														<button type="button" class="btn btn-success btn-out waves-effect waves-light" onclick="limparForm();">Novo</button>
 														<button type="button" class="btn btn-warning btn-out waves-effect waves-light" onclick="deletarUser();">Remover</button>
 														<button type="button" class="btn btn-warning btn-out waves-effect waves-light" onclick="deleteComAjax();">Remover (Ajax)</button>
 														<button type="submit" class="btn btn-primary btn-out waves-effect waves-light">Salvar</button>
+														<button type="button" class="btn btn-secondary btn-out waves-effect waves-light" data-toggle="modal" data-target="#modalUsuario">Pesquisar</button>
 													</form>
 
 												</div>
@@ -100,6 +101,26 @@
 		</div>
 	</div>
 
+  <!-- Modal de pesquisa -->
+  <div class="modal fade" id="modalUsuario" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          ...
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
 	<jsp:include page="javascript-file.jsp"></jsp:include>
 	<script type="text/javascript">
@@ -120,6 +141,7 @@
 
 		function deleteComAjax(){
 			if(confirm('Deseja excluir o cadastro?')){
+				//action do formulário
 				var urlAction = document.getElementById('formUser').action;
 				var idUser = document.getElementById('id').value;
 
