@@ -4,11 +4,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.arb.connection.SingleConnectionBanco;
 import com.arb.model.ModelLogin;
 /*
- * obs.: Em outro momento vou colocar os try/catch todos aqui, pq fica um código muito poluido na servlet.
+ * obs.: Em outro momento vou colocar os try/catch todos aqui, pq fica um cï¿½digo muito poluido na servlet.
  */
 public class DAOUsuarioRepository {
 	private Connection connection;
@@ -29,7 +31,7 @@ public class DAOUsuarioRepository {
 
 			connection.commit();
 
-			// usar o this, senão não traz o id do usuário
+			// usar o this, senï¿½o nï¿½o traz o id do usuï¿½rio
 		} else {
 			atualizarUsuario(user);
 		}
@@ -49,15 +51,15 @@ public class DAOUsuarioRepository {
 	}
 
 	/**
-	 * Retorna o usuário caso exista no BD
+	 * Retorna o usuï¿½rio caso exista no BD
 	 * 
-	 * @param login - que será pesquisado na tabela
+	 * @param login - que serï¿½ pesquisado na tabela
 	 * @return
 	 * @throws SQLException
 	 */
 	public ModelLogin consultarUsuario(String login) throws SQLException {
 		ModelLogin obj = null;
-		// novamente, não vou adotar a conversão para maiúsculo.
+		// novamente, nï¿½o vou adotar a conversï¿½o para maiï¿½sculo.
 //		String sql = "SELECT * FROM model_login where upper(login) = upper('?')";
 		String sql = "SELECT id, nome, email, login, senha FROM model_login where login = ?";
 		PreparedStatement ps = connection.prepareStatement(sql);
@@ -73,9 +75,31 @@ public class DAOUsuarioRepository {
 		}
 		return obj;
 	}
+	
+	/**
+	 * No formulÃ¡rio do usuÃ¡rio tem um campo de pesquisa, Ã© uma parcial de string
+	 * vai via ajax para o servlet. Como a busca pode trazer mais de um usuÃ¡rio
+	 * tem que retornar uma lista. No form que estÃ¡ em modal terÃ¡ uma tabela
+	 * para listar o que foi comparado.
+	 * @param str (Ã© parte do nome que serÃ¡ buscado com like no sql)
+	 * @return
+	 * @throws SQLException
+	 */
+	public List<ModelLogin> buscarUsuario(String str) throws SQLException {
+		List<ModelLogin> users = new ArrayList<>();
+		String sql = "SELECT id, nome from model_login where login like (?)";
+		PreparedStatement ps = connection.prepareStatement(sql);
+		ps.setString(1, str);
+		ResultSet rs = ps.executeQuery();
+		while(rs.next()) {
+			
+		}
+		
+		return users;
+	}
 
-	// nem precisa desse método, dá pra usar o consultarUsuario, se retornar null é
-	// pq não existe o cadastro
+	// nem precisa desse mï¿½todo, dï¿½ pra usar o consultarUsuario, se retornar null ï¿½
+	// pq nï¿½o existe o cadastro
 	public boolean validarLogin(String login) throws SQLException {
 		String sql = "select count(1) > 0 as existe from model_login where login = ?";
 		PreparedStatement ps = connection.prepareStatement(sql);

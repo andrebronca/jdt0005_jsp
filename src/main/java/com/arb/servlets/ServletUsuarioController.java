@@ -30,21 +30,29 @@ public class ServletUsuarioController extends HttpServlet {
 			String acao = request.getParameter("acao");
 			String msg = null;
 			String idUser = request.getParameter("id");
+			String nomeBuscar = request.getParameter("nomebuscar");
 			Long id = null;
 			
 			if (idUser != null) {
 				id = Long.parseLong(idUser);
 			}
 			
-			if(acao != null && !acao.isEmpty() && acao.equalsIgnoreCase("deletar")) {
-				dao.deletarUser(id);
-				msg = "Excluido com sucesso!";
-				redirectComMsg("/principal/usuario.jsp", msg, request, response);
-			} else if(acao != null && !acao.isEmpty() && acao.equalsIgnoreCase("ajaxdeletar")){
-				//específico para Ajax
-				dao.deletarUser(id);
-				response.getWriter().write("Excluido com sucesso via Ajax!");
+			if (acao != null && !acao.isEmpty()) {
+				if(acao.equalsIgnoreCase("deletar")) {
+					dao.deletarUser(id);
+					msg = "Excluido com sucesso!";
+					redirectComMsg("/principal/usuario.jsp", msg, request, response);
+				} else if(acao.equalsIgnoreCase("ajaxdeletar")){
+					//específico para Ajax
+					dao.deletarUser(id);
+					response.getWriter().write("Excluido com sucesso via Ajax!");
+				} else if (acao.equalsIgnoreCase("buscarNomeAjax")) {
+					System.out.println(nomeBuscar);
+					//dao.buscarUsuario(nomeBuscar);
+					//response.getWriter();
+				}	
 			}
+			
 		} catch (NumberFormatException e) {
 			e.printStackTrace();
 			redirectComMsg(Constantes.ERRORPAGE, "Exception: "+ e.getMessage(), request, response);

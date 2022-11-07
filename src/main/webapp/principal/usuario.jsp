@@ -106,17 +106,44 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Pesquisa de usuário</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body">
-          ...
+          
+          <div class="input-group mb-3">
+					  <input type="text" class="form-control" placeholder="Nome do usuário" id="txt_buscar_nome"
+					   aria-label="nome" aria-describedby="basic-addon2">
+					  <div class="input-group-append">
+					    <button class="btn btn-outline-success" type="button" onclick="buscarUsuario();">Buscar</button>
+					  </div>
+					</div>
+					
+					<table class="table table-hover">
+					  <thead>
+					    <tr>
+					      <th scope="col">ID</th>
+					      <th scope="col">Nome</th>
+					      <th scope="col">Ver</th>
+					    </tr>
+					  </thead>
+					  <tbody>
+					   <!-- será preenchido com javascript
+					    <tr>
+					      <th scope="row">1</th>
+					      <td>Mark</td>
+					      <td>Otto</td>
+					      <td>@mdo</td>
+					    </tr>
+					     -->
+					  </tbody>
+					</table>
+					
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
         </div>
       </div>
     </div>
@@ -136,6 +163,30 @@
 				document.getElementById("formUser").method = 'get';
 				document.getElementById("acao").value = 'deletar';
 				document.getElementById("formUser").submit();
+			}
+		}
+		
+		function buscarUsuario(){
+			let nome_buscar = document.getElementById('txt_buscar_nome').value.trim();
+			
+			
+			//Esse null é pra cair o c do b. só objeto é null.
+			if (nome_buscar != null && nome_buscar != '' && nome_buscar.length > 3){
+				let urlAction = document.getElementById('formUser').action;
+				
+			  $.ajax({
+				  method: 'get',
+				  url: urlAction,
+				  contentType: 'application/x-www-form-urlencoded;charset=utf-8',
+				  data: 'acao=buscarNomeAjax&nomebuscar='+ nome_buscar,
+				  success: function(response){
+					  
+				  }
+			  }).fail(function(xhr, status, errorThrown){
+				  alert('Erro ao pesquisar o usuário: '+ xhr.responseText);
+			  });		
+			} else {
+				alert('Informe pelo menos 3 caracteres para a busca');
 			}
 		}
 
