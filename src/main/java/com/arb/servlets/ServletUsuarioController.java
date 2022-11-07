@@ -2,10 +2,12 @@ package com.arb.servlets;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
 
 import com.arb.constantes.Constantes;
 import com.arb.dao.DAOUsuarioRepository;
 import com.arb.model.ModelLogin;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
@@ -30,7 +32,7 @@ public class ServletUsuarioController extends HttpServlet {
 			String acao = request.getParameter("acao");
 			String msg = null;
 			String idUser = request.getParameter("id");
-			String nomeBuscar = request.getParameter("nomebuscar");
+			
 			Long id = null;
 			
 			if (idUser != null) {
@@ -47,9 +49,12 @@ public class ServletUsuarioController extends HttpServlet {
 					dao.deletarUser(id);
 					response.getWriter().write("Excluido com sucesso via Ajax!");
 				} else if (acao.equalsIgnoreCase("buscarNomeAjax")) {
-					System.out.println(nomeBuscar);
-					//dao.buscarUsuario(nomeBuscar);
-					//response.getWriter();
+					String nomeBuscar = request.getParameter("nomebuscar");
+					List<ModelLogin> listaUsuarios = dao.buscarUsuario(nomeBuscar);
+					ObjectMapper mapper = new ObjectMapper();
+					String json = mapper.writeValueAsString(listaUsuarios);
+					System.out.println(json);
+					response.getWriter().write(json);
 				}	
 			}
 			

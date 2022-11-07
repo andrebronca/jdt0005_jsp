@@ -28,13 +28,13 @@ String path = request.getContextPath();
 		  <input type="hidden" value="<%= request.getParameter("url") %>" name="url">
 		  <div class="col-md-6">
   			<label for="login" class="form-label">Login</label>
-	   		<input type="text" name="login" id="login" class="form-control" required>
+	   		<input type="text" name="login" id="login" class="form-control" required value="admin">
 	   		<div class="invalid-feedback">É necessário informar o login!</div>
 	   		<div class="valid-feedback">Ok</div>
 		  </div>
 			<div class="col-md-6">
 				<label for="senha" class="form-label">Senha</label>
-				<input type="password" name="senha" id="senha" class="form-control" required>
+				<input type="password" name="senha" id="senha" class="form-control" required value="admin">
 				<div class="invalid-feedback">É necessário informar a senha!</div>
 				<div class="valid-feedback">Ok</div>
 			</div>

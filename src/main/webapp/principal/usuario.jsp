@@ -171,7 +171,7 @@
 			
 			
 			//Esse null é pra cair o c do b. só objeto é null.
-			if (nome_buscar != null && nome_buscar != '' && nome_buscar.length > 3){
+			if (nome_buscar != null && nome_buscar != '' && nome_buscar.length > 2){
 				let urlAction = document.getElementById('formUser').action;
 				
 			  $.ajax({
@@ -180,7 +180,7 @@
 				  contentType: 'application/x-www-form-urlencoded;charset=utf-8',
 				  data: 'acao=buscarNomeAjax&nomebuscar='+ nome_buscar,
 				  success: function(response){
-					  
+					  alert(response);
 				  }
 			  }).fail(function(xhr, status, errorThrown){
 				  alert('Erro ao pesquisar o usuário: '+ xhr.responseText);

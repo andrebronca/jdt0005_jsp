@@ -77,24 +77,51 @@ public class DAOUsuarioRepository {
 	}
 	
 	/**
-	 * No formulário do usuário tem um campo de pesquisa, é uma parcial de string
-	 * vai via ajax para o servlet. Como a busca pode trazer mais de um usuário
-	 * tem que retornar uma lista. No form que está em modal terá uma tabela
-	 * para listar o que foi comparado.
-	 * @param str (é parte do nome que será buscado com like no sql)
+	 * Fiz esse metodo pq nao havia nenhum buscando por id.
+	 * Na consulta por usuario, do forumlario modal, � pra retornar uma lista
+	 * entao ir� pesquisar daqui cada usuario e adicionar na lista.
+	 * Nao retorna a senha preenchida.
+	 * @param id
 	 * @return
 	 * @throws SQLException
 	 */
-	public List<ModelLogin> buscarUsuario(String str) throws SQLException {
-		List<ModelLogin> users = new ArrayList<>();
-		String sql = "SELECT id, nome from model_login where login like (?)";
+	public ModelLogin getUsuarioPorId(Long id) throws SQLException {
+		String sql = "select id, nome, email, login from model_login where id = ?";
 		PreparedStatement ps = connection.prepareStatement(sql);
-		ps.setString(1, str);
+		ps.setLong(1, id);
+		ResultSet rs = ps.executeQuery();
+		ModelLogin user = null;
+		while(rs.next()) {
+			user = new ModelLogin();
+			user.setId(rs.getLong("id"));
+			user.setNome(rs.getString("nome"));
+			user.setEmail(rs.getString("email"));
+			user.setLogin(rs.getString("login"));
+		}
+		return user;
+	}
+	
+	/**
+	 * No formulario do usuario tem um campo de pesquisa, eh uma parcial de string
+	 * vai via ajax para o servlet. Como a busca pode trazer mais de um usuário
+	 * tem que retornar uma lista. No form que está em modal terá uma tabela
+	 * para listar o que foi comparado.
+	 * @param nome ( parte do nome que sera buscado com like no sql)
+	 * @return
+	 * @throws SQLException
+	 */
+	public List<ModelLogin> buscarUsuario(String nome) throws SQLException {
+		List<ModelLogin> users = new ArrayList<>();
+		String sql = "SELECT id from model_login where lower(nome) like ? ";
+		PreparedStatement ps = connection.prepareStatement(sql);
+		ps.setString(1, "%"+ nome.toLowerCase() +"%");
 		ResultSet rs = ps.executeQuery();
 		while(rs.next()) {
-			
+			ModelLogin user = getUsuarioPorId(rs.getLong("id"));
+			if (user != null) {
+				users.add(user);
+			}
 		}
-		
 		return users;
 	}
 
