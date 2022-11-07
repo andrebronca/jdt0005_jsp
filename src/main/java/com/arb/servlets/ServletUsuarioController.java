@@ -52,10 +52,17 @@ public class ServletUsuarioController extends HttpServlet {
 					String nomeBuscar = request.getParameter("nomebuscar");
 					List<ModelLogin> listaUsuarios = dao.buscarUsuario(nomeBuscar);
 					ObjectMapper mapper = new ObjectMapper();
-					String json = mapper.writeValueAsString(listaUsuarios);
-					System.out.println(json);
-					response.getWriter().write(json);
-				}	
+					String jsonUsuarios = mapper.writeValueAsString(listaUsuarios);
+					response.getWriter().write(jsonUsuarios);
+				} else if (acao.equalsIgnoreCase("buscarEditar")) {
+					String idEditar = request.getParameter("id");
+					if (idEditar != null) {
+						ModelLogin user = dao.getUsuarioPorId(Long.parseLong(idEditar));
+						msg = "Usuario pronto para edi&ccedil;&atilde;o";
+						request.setAttribute("mLogin", user); // retorna os dados para a tela, mas não com id gerado
+						redirectComMsg("/principal/usuario.jsp", msg, request, response);
+					}
+				}
 			}
 			
 		} catch (NumberFormatException e) {
@@ -78,7 +85,7 @@ public class ServletUsuarioController extends HttpServlet {
 		try {
 			
 			String id = request.getParameter("id");
-			String msg = "Adição realizada com sucesso!";
+			String msg = "Adicao realizada com sucesso!";
 			Long idUser = id != null && !id.isEmpty() ? Long.parseLong(id) : null; // preferi separar
 			String nome = request.getParameter("nome");
 			String email = request.getParameter("email");
@@ -94,7 +101,7 @@ public class ServletUsuarioController extends HttpServlet {
 
 			//novo usuario o id é null. Se já existe retorna true
 			if (dao.validarLogin(user.getLogin()) && user.getId() == null) {
-				msg ="Já existe esse login cadastrado!";
+				msg ="Ja existe esse login cadastrado!";
 			} else {	//salvar um novo ou atualizar
 				msg = user.isNovo3() ? "Adicionado com sucesso!" : "Atualizado com sucesso!";
 				user = dao.salvarUsuario(user);
@@ -110,10 +117,11 @@ public class ServletUsuarioController extends HttpServlet {
 	}
 
 	/**
-	 * 
+	 * Fiz esse metodo para facilitar a codificacao e evitar que fique muito grando devido a quantidade
+	 * de vezes em que o codigo eh chamado.
 	 * @param pageDestino
 	 * @param msgExibirTela
-	 * @param request
+	 * @param request (recebe um objeto que ser� percorrido para preencher o formulario)
 	 * @param response
 	 * @throws ServletException
 	 * @throws IOException

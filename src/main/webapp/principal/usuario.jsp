@@ -121,26 +121,20 @@
 					  </div>
 					</div>
 					
-					<table class="table table-hover">
-					  <thead>
-					    <tr>
-					      <th scope="col">ID</th>
-					      <th scope="col">Nome</th>
-					      <th scope="col">Ver</th>
-					    </tr>
-					  </thead>
-					  <tbody>
-					   <!-- será preenchido com javascript
-					    <tr>
-					      <th scope="row">1</th>
-					      <td>Mark</td>
-					      <td>Otto</td>
-					      <td>@mdo</td>
-					    </tr>
-					     -->
-					  </tbody>
-					</table>
-					
+					<div style="height: 300px; overflow: scroll;">
+						<table class="table table-hover" id="listaUsuariosPesquisados">
+						  <thead>
+						    <tr>
+						      <th scope="col">ID</th>
+						      <th scope="col">Nome</th>
+						      <th scope="col">Ver</th>
+						    </tr>
+						  </thead>
+						  <tbody>
+						  </tbody>
+						</table>
+					</div>
+			<span id="totalResultados"></span>					
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
@@ -152,8 +146,8 @@
 	<jsp:include page="javascript-file.jsp"></jsp:include>
 	<script type="text/javascript">
 		function limparForm(){
-			var elementos = document.getElementById("formUser").elements;
-			for(var p = 0; p < elementos.length; p++){
+			let elementos = document.getElementById("formUser").elements;
+			for(let p = 0; p < elementos.length; p++){
 				elementos[p].value = '';
 			}
 		}
@@ -165,13 +159,18 @@
 				document.getElementById("formUser").submit();
 			}
 		}
+
+		function verEditar(id){
+			let urlAction = document.getElementById('formUser').action;
+			window.location.href = urlAction +'?acao=buscarEditar&id='+id;
+		}
 		
 		function buscarUsuario(){
 			let nome_buscar = document.getElementById('txt_buscar_nome').value.trim();
 			
 			
 			//Esse null é pra cair o c do b. só objeto é null.
-			if (nome_buscar != null && nome_buscar != '' && nome_buscar.length > 2){
+			if (nome_buscar != null && nome_buscar != ''){
 				let urlAction = document.getElementById('formUser').action;
 				
 			  $.ajax({
@@ -180,21 +179,35 @@
 				  contentType: 'application/x-www-form-urlencoded;charset=utf-8',
 				  data: 'acao=buscarNomeAjax&nomebuscar='+ nome_buscar,
 				  success: function(response){
-					  alert(response);
+					  let lista_usuarios = JSON.parse(response);
+					  $('#listaUsuariosPesquisados > tbody > tr').remove();
+					  $('#totalResultados').text('');
+					  
+					  for(let i = 0; i < lista_usuarios.length; i++){
+						  let idUser = lista_usuarios[i].id;
+						  let nomeUser = lista_usuarios[i].nome;
+						  $('#listaUsuariosPesquisados > tbody').append('<tr>'+
+								  '<td>'+ idUser +'</td>'+
+								  '<td>'+ nomeUser +'</td>'+
+								  '<td><button type="button" onclick="verEditar('+ idUser +');" class="btn btn-info btn-out waves-effect waves-light">Ver</button></td>'+
+								  '</tr>');
+					}
+					$('#totalResultados').text('Total de resultados: '+ lista_usuarios.length);
+					  
 				  }
 			  }).fail(function(xhr, status, errorThrown){
 				  alert('Erro ao pesquisar o usuário: '+ xhr.responseText);
 			  });		
-			} else {
-				alert('Informe pelo menos 3 caracteres para a busca');
 			}
 		}
+
+		
 
 		function deleteComAjax(){
 			if(confirm('Deseja excluir o cadastro?')){
 				//action do formulário
-				var urlAction = document.getElementById('formUser').action;
-				var idUser = document.getElementById('id').value;
+				let urlAction = document.getElementById('formUser').action;
+				let idUser = document.getElementById('id').value;
 
 				$.ajax({
 					method: 'get',
