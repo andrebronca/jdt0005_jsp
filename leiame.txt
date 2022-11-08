@@ -1,3 +1,4 @@
+Módulo: 22
 Web Dynamic Project
 Convert to maven
 jre e jdk 11
@@ -7,6 +8,7 @@ TomCat 10: funcionou startar a página index.jsp
 Obs.: Wildfly 24 não localizou o index.jsp
 Todas as versões de java e pom.xml estão setados para java 11
 Mesma configuração no windows 10.
+Obs.: Aula 48 trava o projeto ao adicionar dependencias para o jstl
 -----------------
 depois de startar o tomcat, url de acesso.
 http://localhost:8080/jdt0005_curso_jsp/
