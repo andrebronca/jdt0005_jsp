@@ -12,14 +12,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @WebServlet(urlPatterns = { "/ServletUsuarioController" })
-public class ServletUsuarioController extends HttpServlet {
+public class ServletUsuarioController extends ServletGenericUtil {
 
 	private static final long serialVersionUID = 13025390838445016L;
+	private final String PG_USER = "/principal/usuario.jsp";
 	private DAOUsuarioRepository dao = new DAOUsuarioRepository();
 
 	public ServletUsuarioController() {
@@ -43,26 +43,43 @@ public class ServletUsuarioController extends HttpServlet {
 				if(acao.equalsIgnoreCase("deletar")) {
 					dao.deletarUser(id);
 					msg = "Excluido com sucesso!";
-					redirectComMsg("/principal/usuario.jsp", msg, request, response);
+					
+					request.setAttribute("usersLista", dao.getTodosUsers(super.getUserIdLogado(request)));
+					
+					redirectComMsg(PG_USER, msg, request, response);
 				} else if(acao.equalsIgnoreCase("ajaxdeletar")){
 					//específico para Ajax
 					dao.deletarUser(id);
 					response.getWriter().write("Excluido com sucesso via Ajax!");
 				} else if (acao.equalsIgnoreCase("buscarNomeAjax")) {
 					String nomeBuscar = request.getParameter("nomebuscar");
-					List<ModelLogin> listaUsuarios = dao.buscarUsuario(nomeBuscar);
+					List<ModelLogin> listaUsuarios = dao.buscarUsuario(nomeBuscar, super.getUserIdLogado(request));
 					ObjectMapper mapper = new ObjectMapper();
 					String jsonUsuarios = mapper.writeValueAsString(listaUsuarios);
 					response.getWriter().write(jsonUsuarios);
 				} else if (acao.equalsIgnoreCase("buscarEditar")) {
 					String idEditar = request.getParameter("id");
 					if (idEditar != null) {
-						ModelLogin user = dao.getUsuarioPorId(Long.parseLong(idEditar));
+						ModelLogin user = dao.getUsuarioPorId(Long.parseLong(idEditar), super.getUserIdLogado(request));
 						msg = "Usuario pronto para edi&ccedil;&atilde;o";
 						request.setAttribute("mLogin", user); // retorna os dados para a tela, mas não com id gerado
-						redirectComMsg("/principal/usuario.jsp", msg, request, response);
+						
+						request.setAttribute("usersLista", dao.getTodosUsers(super.getUserIdLogado(request)));
+						redirectComMsg(PG_USER, msg, request, response);
 					}
+				} else if (acao.equalsIgnoreCase("listarUser")) {
+//					List<ModelLogin> usersLista = dao.getTodosUsers();
+//					request.setAttribute("usersLista", usersLista);
+//					msg = usersLista.size() > 0 ? "Total de usuários: "+ usersLista.size() : null; 
+//					redirectComMsg(PG_USER, msg, request, response);
+					redirecionarListaUsuarios(request, response);
 				}
+			} else {
+//				List<ModelLogin> usersLista = dao.getTodosUsers();
+//				request.setAttribute("usersLista", usersLista);
+//				msg = usersLista.size() > 0 ? "Total de usuários: "+ usersLista.size() : null; 
+//				redirectComMsg(PG_USER, msg, request, response);
+				redirecionarListaUsuarios(request, response);
 			}
 			
 		} catch (NumberFormatException e) {
@@ -78,6 +95,14 @@ public class ServletUsuarioController extends HttpServlet {
 			e.printStackTrace();
 			redirectComMsg(Constantes.ERRORPAGE, "Exception: "+ e.getMessage(), request, response);
 		}
+	}
+	
+	private void redirecionarListaUsuarios(HttpServletRequest request, HttpServletResponse response) 
+			throws SQLException, ServletException, IOException {
+		List<ModelLogin> usersLista = dao.getTodosUsers(super.getUserIdLogado(request));
+		request.setAttribute("usersLista", usersLista);
+		String msg = usersLista.size() > 0 ? "Total de usuários: "+ usersLista.size() : null; 
+		redirectComMsg(PG_USER, msg, request, response);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -104,12 +129,13 @@ public class ServletUsuarioController extends HttpServlet {
 				msg ="Ja existe esse login cadastrado!";
 			} else {	//salvar um novo ou atualizar
 				msg = user.isNovo3() ? "Adicionado com sucesso!" : "Atualizado com sucesso!";
-				user = dao.salvarUsuario(user);
+				user = dao.salvarUsuario(user, super.getUserIdLogado(request));
 			}
 			System.out.println(user);
 
 			request.setAttribute("mLogin", user); // retorna os dados para a tela, mas não com id gerado
-			redirectComMsg("/principal/usuario.jsp", msg, request, response);
+			request.setAttribute("usersLista", dao.getTodosUsers(super.getUserIdLogado(request)));	//lista de usuarios
+			redirectComMsg(PG_USER, msg, request, response);
 		} catch (Exception e) {
 			e.printStackTrace();
 			redirectComMsg(Constantes.ERRORPAGE, "Exception: "+ e.getMessage(), request, response);
@@ -121,7 +147,7 @@ public class ServletUsuarioController extends HttpServlet {
 	 * de vezes em que o codigo eh chamado.
 	 * @param pageDestino
 	 * @param msgExibirTela
-	 * @param request (recebe um objeto que ser� percorrido para preencher o formulario)
+	 * @param request (recebe um objeto que ser� percorrido para preencher o formulario)
 	 * @param response
 	 * @throws ServletException
 	 * @throws IOException

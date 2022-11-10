@@ -54,7 +54,7 @@ String path = request.getContextPath();
 	            </a>
 	            <ul class="pcoded-submenu">
 	                <li class=" ">
-	                    <a href="<%= path %>/principal/usuario.jsp" class="waves-effect waves-dark">
+	                    <a href="<%= path %>/ServletUsuarioController?acao=listarUser" class="waves-effect waves-dark">
 	                        <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
 	                        <!-- FIXME ACCORDION -->
 	                        <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Usuário</span>
