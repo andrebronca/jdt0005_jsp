@@ -41,8 +41,12 @@ public class ServletUsuarioController extends ServletGenericUtil {
 			
 			if (acao != null && !acao.isEmpty()) {
 				if(acao.equalsIgnoreCase("deletar")) {
-					dao.deletarUser(id);
-					msg = "Excluido com sucesso!";
+					boolean removido = dao.deletarUser(id);
+					if (removido) {
+						msg = "Excluido com sucesso!";
+					} else {
+						msg = "Não é possível remover o id: "+ id +", pois este usuário realizou cadastros!";
+					}
 					
 					request.setAttribute("usersLista", dao.getTodosUsers(super.getUserIdLogado(request)));
 					

@@ -163,7 +163,9 @@ public class DAOUsuarioRepository {
 		}
 		PreparedStatement ps = connection.prepareStatement(sql);
 		ps.setLong(1, id);
-		ps.setLong(2, idUserLogado);
+		if (!isAdmin(idUserLogado)) {
+			ps.setLong(2, idUserLogado);
+		}
 		ResultSet rs = ps.executeQuery();
 		ModelLogin user = null;
 		while(rs.next()) {
@@ -216,14 +218,40 @@ public class DAOUsuarioRepository {
 	}
 	
 	//em uma aplicação, farei exclusão lógica e anotar quem fez
-	public void deletarUser(Long id) throws SQLException {
-		String sql = "DELETE FROM model_login WHERE id = ? ";
-		if (!isAdmin(id)) {
-			sql += " and not useradmin ";
+	public boolean deletarUser(Long id) throws SQLException {
+		if (!possuiCadastros(id) && !isAdmin(id)) {
+			String sql = "DELETE FROM model_login WHERE id = ? ";
+			PreparedStatement ps = connection.prepareStatement(sql);
+			ps.setLong(1, id);
+			ps.executeUpdate();
+			connection.commit();
+			return true;
+		} else {
+			return false;
 		}
+	}
+	
+	//verificar se o id já realizou cadastros, se sim não pode ser removido 
+	//garantir a integridade de chave estrangeira, se não fizer isso vai sempre exibir uma exception na página de erro.
+	private boolean possuiCadastros(Long id) throws SQLException {
+		boolean temCadastros = false;
+		//não permitir que exclua conta de administrador
+		String sql = "select count(*) as qtd from model_login where usuario_id = ? ";
 		PreparedStatement ps = connection.prepareStatement(sql);
 		ps.setLong(1, id);
-		ps.executeUpdate();
-		connection.commit();
+		ResultSet rs = ps.executeQuery();
+		while(rs.next()) {
+			temCadastros = rs.getInt("qtd") > 0;
+		}
+		return temCadastros;
 	}
+	/* com essa consulta eu sei se tem cadastros e se é admin.
+	 * select m1.useradmin, count(m2.*) as qtd from model_login m1 
+	 * inner join model_login m2 on m1.id = m2.usuario_id
+	 * where m1.id = ?
+	 * group by m1.useradmin
+	 * 
+	 * rs.getBoolean("useradmin")
+	 * rs.getInt("qtd")
+	 */
 }

@@ -13,12 +13,7 @@ public class ServletGenericUtil extends HttpServlet implements Serializable {
 
 	private static final long serialVersionUID = -1796125745069345134L;
 	
-	private DAOUsuarioRepository dao;
-	
-	//forçar a instanciação 
-    public ServletGenericUtil() {
-		dao = new DAOUsuarioRepository();
-	}
+	private DAOUsuarioRepository dao = new DAOUsuarioRepository();
 	
     /**
      * Chamar esse método sem instanciar irá retornar uma Exception
